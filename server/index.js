@@ -17,7 +17,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-connectDB(process.env.MONGO_URL).catch(() => process.exit(1));
+if (!process.env.JWT_SECRET) {
+	console.error('Fatal: JWT_SECRET is not set. Set JWT_SECRET in .env or environment.');
+	process.exit(1);
+}
+
+connectDB().catch(() => process.exit(1));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);

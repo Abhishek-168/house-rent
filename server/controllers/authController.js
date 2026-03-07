@@ -16,7 +16,8 @@ export async function register(req, res) {
     const token = jwt.sign({ id: user._id, role: user.role, isApproved: user.isApproved }, process.env.JWT_SECRET, { expiresIn: '7d' });
     return res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, isApproved: user.isApproved } });
   } catch (err) {
-    return res.status(500).json({ message: 'Server error' });
+    console.error('authController.register error:', err);
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 }
 
@@ -31,7 +32,8 @@ export async function login(req, res) {
     const token = jwt.sign({ id: user._id, role: user.role, isApproved: user.isApproved }, process.env.JWT_SECRET, { expiresIn: '7d' });
     return res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, isApproved: user.isApproved } });
   } catch (err) {
-    return res.status(500).json({ message: 'Server error' });
+    console.error('authController.login error:', err);
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 }
 

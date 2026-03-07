@@ -12,7 +12,7 @@ const PropertySchema = new Schema({
   bedrooms: { type: Number, default: 1 },
   bathrooms: { type: Number, default: 1 },
   coordinates: {
-    type: { type: String, enum: ['Point'], default: 'Point' },
+    type: { type: String, enum: ['Point'] },
     coordinates: { type: [Number], index: '2dsphere' }
   },
   propertyType: { type: String },

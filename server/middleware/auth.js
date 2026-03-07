@@ -16,8 +16,11 @@ export const authenticate = (req, res, next) => {
 };
 
 export const requireRole = (...allowedRoles) => (req, res, next) => {
+  const enforceOwnerApproval = process.env.ENFORCE_OWNER_APPROVAL === 'true';
   if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
   if (!allowedRoles.includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
-  if (req.user.role === 'Owner' && !req.user.isApproved) return res.status(403).json({ message: 'Owner not approved' });
+  if (enforceOwnerApproval && req.user.role === 'Owner' && !req.user.isApproved) {
+    return res.status(403).json({ message: 'Owner not approved' });
+  }
   next();
 };

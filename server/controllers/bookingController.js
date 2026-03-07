@@ -13,4 +13,16 @@ export async function contactBooking(req, res) {
   }
 }
 
-export default { contactBooking };
+export async function listOwnerBookings(req, res) {
+  try {
+    const ownerId = req.user.id;
+    const ownerProperties = await Property.find({ owner: ownerId }).select('_id');
+    const propIds = ownerProperties.map(p => p._id);
+    const bookings = await Booking.find({ property: { $in: propIds } }).populate('property', 'title location').populate('tenant', 'name email');
+    return res.json({ bookings });
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+export default { contactBooking, listOwnerBookings };
